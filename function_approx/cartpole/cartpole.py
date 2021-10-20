@@ -101,6 +101,7 @@ if __name__ == '__main__':
 		obs = env.reset()
 
 		while not done:
+			env.render()
 			action = agent.choose_action(obs)
 			obs_, reward, done, info = env.step(action)
 			score += reward

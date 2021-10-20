@@ -6,10 +6,10 @@ class BlockingMaze:
 	def __init__(self):
 		self.rows = 6
 		self.columns = 9
-		self.start = (2,0)
+		self.start = (5,3)
 		self.end = False
 		self.goal = (0,8)
-		self.blocks = [(1, 2), (2, 2), (3, 2), (0, 7), (1, 7), (2, 7), (4, 5)]
+		self.blocks = [(3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8)]
 		self.state = self.start
 		self.actions = ['left', 'up', 'right', 'down']
 		self.actions_index = [0,1,2,3]
@@ -18,6 +18,9 @@ class BlockingMaze:
 		for block in self.blocks:
 			self.blocking_maze[block] = -1
 
+	def change_env(self):
+		self.blocks = [(3, 0), (3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7)]
+		
 
 	def step(self, action):
 		row, col = self.state

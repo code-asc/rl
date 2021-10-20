@@ -1,9 +1,8 @@
 from maze import BlockingMaze
 import numpy as np
-import matplotlib.pyplot as plt
 
 class DynaAgentPlus:
-	def __init__(self, epsilon=0.3, lr=0.1, n_steps=5, episodes=1, kappa=0.01, with_model=True):
+	def __init__(self, epsilon=0.3, lr=0.9, n_steps=5, episodes=1, kappa=1e-4, with_model=True, enable_change_env=False, enable_after=0):
 		self.maze = BlockingMaze()
 		self.state = self.maze.state
 		self.actions = self.maze.actions_index
@@ -22,6 +21,8 @@ class DynaAgentPlus:
 
 		self.model = {}
 		self.with_model = with_model
+		self.enable_after = enable_after
+		self.enable_change_env = enable_change_env
 
 
 	def choose_action(self):
@@ -94,43 +95,12 @@ class DynaAgentPlus:
 
 			
 			if ep % 10 == 0:
-				print('episode : ', ep)
+				print('dynaq+ episode : ', ep)
 			self.steps_per_episode.append(len(self.state_actions))
 			self.reset()
 
+			if self.enable_change_env:
+				if ep == self.enable_after:
+					self.maze.change_env()
 
 
-if __name__ == "__main__":
-    N_EPISODES = 50
-    # comparison
-    agent = DynaAgentPlus(n_steps=0, episodes=N_EPISODES)
-    agent.play()
-
-    steps_episode_0 = agent.steps_per_episode
-
-    agent = DynaAgentPlus(n_steps=5, episodes=N_EPISODES)
-    agent.play()
-
-    steps_episode_5 = agent.steps_per_episode
-
-    agent = DynaAgentPlus(n_steps=50, episodes=N_EPISODES)
-    agent.play()
-
-    steps_episode_50 = agent.steps_per_episode
-
-    agent = DynaAgentPlus(n_steps=100, episodes=N_EPISODES)
-    agent.play()
-
-    steps_episode_100 = agent.steps_per_episode
-
-    plt.figure(figsize=[10, 6])
-
-    plt.ylim(0, 2000)
-    plt.plot(range(N_EPISODES), steps_episode_0, label="step=0")
-    plt.plot(range(N_EPISODES), steps_episode_5, label="step=5")
-    plt.plot(range(N_EPISODES), steps_episode_50, label="step=50")
-    plt.plot(range(N_EPISODES), steps_episode_100, label="step=100")
-
-    plt.legend()
-
-    plt.show()
